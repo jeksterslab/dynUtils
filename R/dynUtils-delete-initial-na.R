@@ -120,4 +120,5 @@ DeleteInitialNA <- function(data,
       }
     )
   }
+  return(output)
 }
