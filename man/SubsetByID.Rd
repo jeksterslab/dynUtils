@@ -41,7 +41,7 @@ when number of individuals is large.}
 Returns a list by ID numbers.
 }
 \description{
-Subset Data Set by ID
+Creates a list of data frames for each ID.
 }
 \examples{
 # prepare parameters

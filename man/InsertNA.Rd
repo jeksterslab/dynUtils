@@ -44,7 +44,13 @@ when number of individuals is large.}
 Returns a data frame.
 }
 \description{
-Insert NAs for Missing Observations
+Creates a sequence of time values
+using the smallest time-interval as starting point
+and the largest time-interval as end point
+with \code{delta_t} increments.
+This new sequence is added to the empirical time values.
+Rows with no observations for each specific time value
+are inserted as NAs.
 }
 \examples{
 # prepare parameters

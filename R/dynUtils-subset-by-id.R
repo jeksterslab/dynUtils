@@ -1,5 +1,7 @@
 #' Subset Data Set by ID
 #'
+#' Creates a list of data frames for each ID.
+#'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @return Returns a list by ID numbers.
