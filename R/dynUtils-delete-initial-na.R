@@ -1,5 +1,9 @@
 #' Delete for NAs in Initial Row By ID
 #'
+#' Deletes the initial row by ID if there are missing values.
+#' The function does this recursively until the first row per ID
+#' does not have missing observations.
+#'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @inheritParams SubsetByID
@@ -120,5 +124,10 @@ DeleteInitialNA <- function(data,
       }
     )
   }
+  output <- do.call(
+    what = "rbind",
+    args = output
+  )
+  rownames(output) <- NULL
   return(output)
 }
