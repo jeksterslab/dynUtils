@@ -41,9 +41,9 @@ when number of individuals is large.}
 Returns a data frame.
 }
 \description{
-Deletes the initial row by ID if there are missing values.
-The function does this recursively until the first row per ID
-does not have missing observations.
+The function removes the initial row by ID if it contains missing values.
+This process is repeated recursively
+until the first row per ID no longer has missing observations.
 }
 \examples{
 # prepare parameters

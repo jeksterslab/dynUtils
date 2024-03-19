@@ -41,7 +41,7 @@ when number of individuals is large.}
 Returns a list by ID numbers.
 }
 \description{
-Creates a list of data frames for each ID.
+The function creates a list of data frames for each ID.
 }
 \examples{
 # prepare parameters

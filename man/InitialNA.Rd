@@ -42,7 +42,8 @@ Returns a vector of ID numbers
 where the initial row has any missing value.
 }
 \description{
-Check for NAs in Initial Row By ID
+The function checks if there are missing values
+for the initial row by ID.
 }
 \examples{
 # prepare parameters

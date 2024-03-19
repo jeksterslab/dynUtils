@@ -1,6 +1,6 @@
 #' Subset Data Set by ID
 #'
-#' Creates a list of data frames for each ID.
+#' The function creates a list of data frames for each ID.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'

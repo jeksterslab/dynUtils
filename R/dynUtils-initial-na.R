@@ -1,5 +1,8 @@
 #' Check for NAs in Initial Row By ID
 #'
+#' The function checks if there are missing values
+#' for the initial row by ID.
+#'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @inheritParams SubsetByID

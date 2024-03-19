@@ -44,13 +44,13 @@ when number of individuals is large.}
 Returns a data frame.
 }
 \description{
-Creates a sequence of time values
-using the smallest time-interval as starting point
-and the largest time-interval as end point
-with \code{delta_t} increments.
-This new sequence is added to the empirical time values.
-Rows with no observations for each specific time value
-are inserted as NAs.
+The function creates a sequence of time values.
+It starts with the smallest time value as the starting point
+and the largest time value as the endpoint.
+The sequence is incremented by \code{delta_t}.
+This new sequence is combined with the existing empirical time values.
+For any specific time value where there are no observations,
+NAs are inserted.
 }
 \examples{
 # prepare parameters
