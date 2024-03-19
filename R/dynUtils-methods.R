@@ -45,7 +45,7 @@
 #' @keywords methods
 #' @export
 print.dynutillist <- function(x,
-                                     ...) {
+                              ...) {
   attributes(x)$args <- NULL
   attributes(x)$idx <- NULL
   attributes(x)$class <- NULL
