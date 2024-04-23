@@ -94,6 +94,7 @@ InsertNA(
 Other Dynamic Modeling Utility Functions: 
 \code{\link{DeleteInitialNA}()},
 \code{\link{InitialNA}()},
+\code{\link{ScaleByID}()},
 \code{\link{SubsetByID}()}
 }
 \author{
