@@ -17,9 +17,9 @@ Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Depends: R (>= 3.5.0)
 Suggests: knitr, rmarkdown, testthat, simStateSpace
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2024-05-01 03:14:33 UTC; root
+Packaged: 2024-07-03 08:54:39 UTC; root
 Author: Ivan Jacob Agaloos Pesigan [aut, cre, cph]
     (<https://orcid.org/0000-0003-4818-8420>)
 Maintainer: Ivan Jacob Agaloos Pesigan <r.jeksterslab@gmail.com>
