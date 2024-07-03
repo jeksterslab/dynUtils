@@ -1,9 +1,10 @@
 dynUtils
 ================
 Ivan Jacob Agaloos Pesigan
-2024-05-01
+2024-07-03
 
 <!-- README.md is generated from .setup/readme/README.Rmd. Please edit that file -->
+
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/jeksterslab/dynUtils/workflows/R-CMD-check/badge.svg)](https://github.com/jeksterslab/dynUtils/actions)
@@ -35,7 +36,7 @@ documentation.
 ## References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 
 <div id="ref-RCoreTeam-2023" class="csl-entry">
 
