@@ -127,9 +127,9 @@ InsertNA <- function(data,
           FUN = function(t,
                          p,
                          id) {
-            if (t %in% i[, "time"]) {
+            if (t %in% i[, time]) {
               return(
-                i[which(i[, "time"] == t), ]
+                i[which(i[, time] == t), ]
               )
             } else {
               return(
@@ -166,9 +166,9 @@ InsertNA <- function(data,
           FUN = function(t,
                          p,
                          id) {
-            if (t %in% i[, "time"]) {
+            if (t %in% i[, time]) {
               return(
-                i[which(i[, "time"] == t), ]
+                i[which(i[, time] == t), ]
               )
             } else {
               return(
