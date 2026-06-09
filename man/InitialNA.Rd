@@ -85,11 +85,11 @@ InitialNA(
 
 }
 \seealso{
-Other Dynamic Modeling Utility Functions: 
-\code{\link{DeleteInitialNA}()},
-\code{\link{InsertNA}()},
-\code{\link{ScaleByID}()},
-\code{\link{SubsetByID}()}
+Other Dynamic Modeling Utility Functions:
+\code{\link[=DeleteInitialNA]{DeleteInitialNA()}},
+\code{\link[=InsertNA]{InsertNA()}},
+\code{\link[=ScaleByID]{ScaleByID()}},
+\code{\link[=SubsetByID]{SubsetByID()}}
 }
 \author{
 Ivan Jacob Agaloos Pesigan
