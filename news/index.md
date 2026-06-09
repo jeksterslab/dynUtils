@@ -1,8 +1,9 @@
 # Changelog
 
-## dynUtils 1.0.0
+## dynUtils 0.9.2
 
-- Initial CRAN submission.
+- Bug fix to `time` argument in
+  [`InitialNA()`](https://github.com/jeksterslab/dynUtils/reference/InitialNA.md).
 
 ## dynUtils 0.9.1
 
