@@ -1,6 +1,6 @@
-# dynUtils 1.0.0
+# dynUtils 0.9.2
 
-* Initial CRAN submission.
+* Bug fix to `time` argument in `InitialNA()`.
 
 # dynUtils 0.9.1
 

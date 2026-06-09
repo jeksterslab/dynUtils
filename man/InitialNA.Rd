@@ -2,7 +2,7 @@
 % Please edit documentation in R/dynUtils-initial-na.R
 \name{InitialNA}
 \alias{InitialNA}
-\title{Insert NAs for Missing Observations}
+\title{Check for NAs in Initial Row By ID}
 \usage{
 InitialNA(data, id, time, observed, covariates = NULL, ncores = NULL)
 }
@@ -38,16 +38,12 @@ Consider using multiple cores
 when number of individuals is large.}
 }
 \value{
-Returns a data frame.
+Returns a vector of ID numbers
+where the initial row has any missing value.
 }
 \description{
-The function creates a sequence of time values.
-It starts with the smallest time value as the starting point
-and the largest time value as the endpoint.
-The sequence is incremented by \code{delta_t}.
-This new sequence is combined with the existing empirical time values.
-For any specific time value where there are no observations,
-NAs are inserted.
+The function checks if there are missing values
+for the initial row by ID.
 }
 \examples{
 # prepare parameters
@@ -78,12 +74,13 @@ ssm <- SimSSMVARFixed(
   type = 0
 )
 data <- as.data.frame(ssm)
-InsertNA(
+# Replace first row with NA
+data[1, paste0("y", 1:p)] <- NA
+InitialNA(
   data = data,
   id = "id",
   time = "time",
   observed = paste0("y", 1:p),
-  delta_t = 0.10
 )
 
 }
