@@ -4,7 +4,9 @@ Ivan Jacob Agaloos Pesigan 2026-06-09
 
 ## Description
 
-Utility functions for data preparation when fitting dynamic models.
+Utility functions for data preparation when fitting dynamic models used
+in Pesigan, Russell, and Chow (2025:
+<https://doi.org/10.1037/met0000779>).
 
 ## Installation
 

@@ -14,8 +14,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="dynUtils: Dynamic Modeling Utilities">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -25,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dynUtils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,12 +73,12 @@ Agaloos Pesigan</h4>
     
     
 <!-- badges: start -->
-<p><a href="https://github.com/jeksterslab/dynUtils/actions"><img src="https://github.com/jeksterslab/dynUtils/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a> <a href="https://github.com/jeksterslab/dynUtils/actions/workflows/test-coverage.yml"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/test-coverage.yml/badge.svg" alt="test-coverage"></a> <a href="https://github.com/jeksterslab/dynUtils/actions/workflows/lint.yml"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/lint.yml/badge.svg" alt="lint"></a> <a href="https://github.com/jeksterslab/dynUtils/actions/workflows/pkgdown-gh-pages.yml"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/pkgdown-gh-pages.yml/badge.svg" alt="pkgdown"></a> <a href="https://codecov.io/gh/jeksterslab/dynUtils" class="external-link"><img src="https://codecov.io/gh/jeksterslab/dynUtils/branch/main/graph/badge.svg" alt="codecov"></a> <!-- badges: end --></p>
+<p><a href="https://github.com/jeksterslab/dynUtils/actions/workflows/make.yml"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/make.yml/badge.svg" alt="Make Project"></a> <a href="https://github.com/jeksterslab/dynUtils/actions/workflows/check-standard.yml"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/check-standard.yml/badge.svg" alt="R-CMD-check-standard"></a> <a href="https://github.com/jeksterslab/dynUtils/actions/workflows/check-oldrel.yml"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/check-oldrel.yml/badge.svg" alt="R-CMD-check-oldrel"></a> <a href="https://github.com/jeksterslab/dynUtils/actions/workflows/test-coverage.yml"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/test-coverage.yml/badge.svg" alt="R Package Test Coverage"></a> <a href="https://github.com/jeksterslab/dynUtils/actions/workflows/lint.yml"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/lint.yml/badge.svg" alt="Lint R Package"></a> <a href="https://github.com/jeksterslab/dynUtils/actions/workflows/pkgdown-gh-pages.yml"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/pkgdown-gh-pages.yml/badge.svg" alt="Package Website (GitHub Pages)"></a> <a href="https://github.com/jeksterslab/dynUtils/actions/workflows/latex.yml"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/latex.yml/badge.svg" alt="Compile LaTeX"></a> <a href="https://github.com/jeksterslab/dynUtils/actions/workflows/shellcheck.yml"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/shellcheck.yml/badge.svg" alt="Shell Check"></a> <a href="https://github.com/jeksterslab/dynUtils/actions/workflows/pages/pages-build-deployment"><img src="https://github.com/jeksterslab/dynUtils/actions/workflows/pages/pages-build-deployment/badge.svg" alt="pages-build-deployment"></a> <a href="https://codecov.io/gh/jeksterslab/dynUtils" class="external-link"><img src="https://codecov.io/gh/jeksterslab/dynUtils/branch/main/graph/badge.svg?token=KVLUET3DJ6" alt="codecov"></a> <!-- badges: end --></p>
 <div class="section level2">
 <h2 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
 </h2>
-<p>Utility functions for data preparation when fitting dynamic
-models.</p>
+<p>Utility functions for data preparation when fitting dynamic models
+used in Pesigan, Russell, and Chow (2025: <a href="https://doi.org/10.1037/met0000779" class="external-link uri">https://doi.org/10.1037/met0000779</a>).</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -94,8 +93,6 @@ models.</p>
 </h2>
 <p>See <a href="https://jeksterslab.github.io/dynUtils" class="external-link">GitHub Pages</a>
 for package documentation.</p>
-<p>See <a href="https://jeksterslab.quarto.pub/dynUtils" class="external-link">Quarto Pub</a>
-for package wiki and other resources.</p>
 </div>
 <div class="section level2 unnumbered">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
