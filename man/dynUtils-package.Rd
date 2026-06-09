@@ -6,7 +6,7 @@
 \alias{dynUtils-package}
 \title{dynUtils: Dynamic Modeling Utilities}
 \description{
-Utility functions for data preparation when fitting dynamic models.
+Utility functions for data preparation when fitting dynamic models used in Pesigan, Russell, and Chow (2025) \doi{10.1037/met0000779}.
 }
 \seealso{
 Useful links:
@@ -23,6 +23,12 @@ Useful links:
 Authors:
 \itemize{
   \item Ivan Jacob Agaloos Pesigan \email{r.jeksterslab@gmail.com} (\href{https://orcid.org/0000-0003-4818-8420}{ORCID}) [copyright holder]
+}
+
+Other contributors:
+\itemize{
+  \item Michael A. Russell \email{mar60@psu.edu} (\href{https://orcid.org/0000-0002-3956-604X}{ORCID}) [contributor]
+  \item Sy-Miin Chow \email{quc16@psu.edu} (\href{https://orcid.org/0000-0003-1938-027X}{ORCID}) [contributor]
 }
 
 }

@@ -1,14 +1,18 @@
-#' Check for NAs in Initial Row By ID
+#' Insert NAs for Missing Observations
 #'
-#' The function checks if there are missing values
-#' for the initial row by ID.
+#' The function creates a sequence of time values.
+#' It starts with the smallest time value as the starting point
+#' and the largest time value as the endpoint.
+#' The sequence is incremented by `delta_t`.
+#' This new sequence is combined with the existing empirical time values.
+#' For any specific time value where there are no observations,
+#' NAs are inserted.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @inheritParams SubsetByID
 #'
-#' @return Returns a vector of ID numbers
-#'   where the initial row has any missing value.
+#' @return Returns a data frame.
 #'
 #' @examples
 #' # prepare parameters
@@ -39,13 +43,12 @@
 #'   type = 0
 #' )
 #' data <- as.data.frame(ssm)
-#' # Replace first row with NA
-#' data[1, paste0("y", 1:p)] <- NA
-#' InitialNA(
+#' InsertNA(
 #'   data = data,
 #'   id = "id",
 #'   time = "time",
 #'   observed = paste0("y", 1:p),
+#'   delta_t = 0.10
 #' )
 #'
 #' @family Dynamic Modeling Utility Functions
@@ -57,68 +60,28 @@ InitialNA <- function(data,
                       observed,
                       covariates = NULL,
                       ncores = NULL) {
-  object <- SubsetByID(
+  data <- .DynUtilsSelectSort(
     data = data,
     id = id,
     time = time,
     observed = observed,
-    covariates = covariates,
-    ncores = ncores
+    covariates = covariates
   )
-  par <- FALSE
-  if (!is.null(ncores)) {
-    ncores <- as.integer(ncores)
-    if (ncores > 1) {
-      par <- TRUE
-    }
-  }
-  if (par) {
-    cl <- parallel::makeCluster(ncores)
-    on.exit(
-      parallel::stopCluster(cl = cl)
-    )
-    output <- parallel::parLapply(
-      cl = cl,
-      X = object,
-      fun = function(i) {
-        missing <- any(
-          is.na(
-            i[1, ]
-          )
-        )
-        if (missing) {
-          return(
-            i[1, attributes(object)$args$id]
-          )
-        } else {
-          return(NA)
-        }
-      }
-    )
+
+  if (nrow(data) == 0L) {
+    data[[id]][0]
   } else {
-    output <- lapply(
-      X = object,
-      FUN = function(i) {
-        missing <- any(
-          is.na(
-            i[1, ]
-          )
-        )
-        if (missing) {
-          return(
-            i[1, attributes(object)$args$id]
-          )
-        } else {
-          return(NA)
-        }
-      }
-    )
+    run <- rle(data[[id]])
+    start <- cumsum(run$lengths) - run$lengths + 1L
+
+    first_rows <- data[
+      start, ,
+      drop = FALSE
+    ]
+
+    first_rows[
+      !stats::complete.cases(first_rows),
+      id
+    ]
   }
-  output <- do.call(
-    what = "rbind",
-    args = output
-  )
-  dim(output)
-  output <- output[stats::complete.cases(output)]
-  return(output)
 }

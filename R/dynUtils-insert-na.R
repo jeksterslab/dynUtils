@@ -1,20 +1,16 @@
-#' Insert NAs for Missing Observations
+#' Check for NAs in Initial Row By ID
 #'
-#' The function creates a sequence of time values.
-#' It starts with the smallest time value as the starting point
-#' and the largest time value as the endpoint.
-#' The sequence is incremented by `delta_t`.
-#' This new sequence is combined with the existing empirical time values.
-#' For any specific time value where there are no observations,
-#' NAs are inserted.
+#' The function checks if there are missing values
+#' for the initial row by ID.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
+#' @inheritParams InitialNA
 #' @param delta_t Positive number.
 #'   Time interval.
-#' @inheritParams SubsetByID
 #'
-#' @return Returns a data frame.
+#' @return Returns a vector of ID numbers
+#'   where the initial row has any missing value.
 #'
 #' @examples
 #' # prepare parameters
@@ -45,12 +41,13 @@
 #'   type = 0
 #' )
 #' data <- as.data.frame(ssm)
-#' InsertNA(
+#' # Replace first row with NA
+#' data[1, paste0("y", 1:p)] <- NA
+#' InitialNA(
 #'   data = data,
 #'   id = "id",
 #'   time = "time",
 #'   observed = paste0("y", 1:p),
-#'   delta_t = 0.10
 #' )
 #'
 #' @family Dynamic Modeling Utility Functions
@@ -64,139 +61,86 @@ InsertNA <- function(data,
                      delta_t,
                      ncores = NULL) {
   stopifnot(delta_t > 0)
-  object <- SubsetByID(
+
+  data <- .DynUtilsSelectSort(
     data = data,
     id = id,
     time = time,
     observed = observed,
-    covariates = covariates,
-    ncores = ncores
+    covariates = covariates
   )
-  # create new time vector with delta_t
-  times <- attributes(object)$idx$time
-  new_times <- sort(
-    unique(
-      c(
-        seq(
-          from = min(times),
-          to = max(times),
-          by = delta_t
-        ),
-        times
-      )
-    )
-  )
-  # create new time vector if min(diff(new_times)) is smaller than delta_t
-  if (delta_t < min(diff(new_times))) {
+
+  if (nrow(data) == 0L) {
+    data
+  } else {
+    times <- data[[time]]
+
     new_times <- sort(
       unique(
         c(
           seq(
             from = min(times),
             to = max(times),
-            by = min(diff(new_times))
+            by = delta_t
           ),
-          new_times
+          times
         )
       )
     )
-  }
-  p <- ncol(object[[1]]) - 2
-  par <- FALSE
-  if (!is.null(ncores)) {
-    ncores <- as.integer(ncores)
-    if (ncores > 1) {
-      par <- TRUE
+
+    ids <- unique(data[[id]])
+
+    n_id <- length(ids)
+    n_time <- length(new_times)
+    n_out <- n_id * n_time
+
+    out <- data[
+      rep.int(
+        x = NA_integer_,
+        times = n_out
+      ), ,
+      drop = FALSE
+    ]
+
+    out[[id]] <- rep(
+      x = ids,
+      each = n_time
+    )
+
+    out[[time]] <- rep(
+      x = new_times,
+      times = n_id
+    )
+
+    key_data <- paste(
+      data[[id]],
+      data[[time]],
+      sep = "\r"
+    )
+
+    key_out <- paste(
+      out[[id]],
+      out[[time]],
+      sep = "\r"
+    )
+
+    pos <- match(
+      x = key_data,
+      table = key_out
+    )
+
+    if (anyDuplicated(key_data)) {
+      stop(
+        "`InsertNA()` requires unique `id`-`time` combinations."
+      )
     }
+
+    out[
+      pos,
+      names(data)
+    ] <- data
+
+    rownames(out) <- NULL
+    out
   }
-  if (par) {
-    cl <- parallel::makeCluster(ncores)
-    on.exit(
-      parallel::stopCluster(cl = cl)
-    )
-    output <- parallel::parLapply(
-      cl = cl,
-      X = object,
-      fun = function(i,
-                     new_times,
-                     j,
-                     p) {
-        id <- i[1, attributes(object)$args$id]
-        out <- lapply(
-          X = new_times,
-          FUN = function(t,
-                         p,
-                         id) {
-            if (t %in% i[, time]) {
-              return(
-                i[which(i[, time] == t), ]
-              )
-            } else {
-              return(
-                c(
-                  id,
-                  t,
-                  rep(x = NA, times = p)
-                )
-              )
-            }
-          },
-          p = p,
-          id = id
-        )
-        out <- do.call(
-          what = "rbind",
-          args = out
-        )
-        return(out)
-      },
-      new_times = new_times,
-      p = p
-    )
-  } else {
-    output <- lapply(
-      X = object,
-      FUN = function(i,
-                     new_times,
-                     j,
-                     p) {
-        id <- i[1, attributes(object)$args$id]
-        out <- lapply(
-          X = new_times,
-          FUN = function(t,
-                         p,
-                         id) {
-            if (t %in% i[, time]) {
-              return(
-                i[which(i[, time] == t), ]
-              )
-            } else {
-              return(
-                c(
-                  id,
-                  t,
-                  rep(x = NA, times = p)
-                )
-              )
-            }
-          },
-          p = p,
-          id = id
-        )
-        out <- do.call(
-          what = "rbind",
-          args = out
-        )
-        return(out)
-      },
-      new_times = new_times,
-      p = p
-    )
-  }
-  output <- do.call(
-    what = "rbind",
-    args = output
-  )
-  rownames(output) <- NULL
-  return(output)
 }

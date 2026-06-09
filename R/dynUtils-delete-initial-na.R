@@ -1,8 +1,8 @@
 #' Delete for NAs in Initial Row By ID
 #'
-#' The function removes the initial row by ID if it contains missing values.
-#' This process is repeated recursively
-#' until the first row per ID no longer has missing observations.
+#' The function removes initial rows by ID if they contain missing values.
+#' This process is repeated until the first row per ID no longer has missing
+#' observations.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
@@ -57,77 +57,43 @@ DeleteInitialNA <- function(data,
                             observed,
                             covariates = NULL,
                             ncores = NULL) {
-  object <- SubsetByID(
+  data <- .DynUtilsSelectSort(
     data = data,
     id = id,
     time = time,
     observed = observed,
-    covariates = covariates,
-    ncores = ncores
+    covariates = covariates
   )
-  par <- FALSE
-  if (!is.null(ncores)) {
-    ncores <- as.integer(ncores)
-    if (ncores > 1) {
-      par <- TRUE
+
+  if (nrow(data) > 0L) {
+    ok <- stats::complete.cases(data)
+
+    if (!all(ok)) {
+      run <- rle(data[[id]])
+      end <- cumsum(run$lengths)
+      start <- end - run$lengths + 1L
+
+      keep <- .DynUtilsLapply(
+        X = seq_along(start),
+        FUN = .DeleteInitialNAKeepIndex,
+        ncores = ncores,
+        start = start,
+        end = end,
+        ok = ok
+      )
+
+      keep <- unlist(
+        x = keep,
+        use.names = FALSE
+      )
+
+      data <- data[
+        keep, ,
+        drop = FALSE
+      ]
     }
   }
-  if (par) {
-    cl <- parallel::makeCluster(ncores)
-    on.exit(
-      parallel::stopCluster(cl = cl)
-    )
-    output <- parallel::parLapply(
-      cl = cl,
-      X = object,
-      fun = function(i) {
-        missing <- any(
-          is.na(
-            i[1, ]
-          )
-        )
-        while (missing) {
-          i <- i[-1, , drop = FALSE]
-          if (dim(i)[1] == 0) {
-            return(NULL)
-          }
-          missing <- any(
-            is.na(
-              i[1, ]
-            )
-          )
-        }
-        return(i)
-      }
-    )
-  } else {
-    output <- lapply(
-      X = object,
-      FUN = function(i) {
-        missing <- any(
-          is.na(
-            i[1, ]
-          )
-        )
-        while (missing) {
-          i <- i[-1, , drop = FALSE]
-          if (dim(i)[1] == 0) {
-            return(NULL)
-          }
-          missing <- any(
-            is.na(
-              i[1, ]
-            )
-          )
-        }
-        return(i)
-      }
-    )
-  }
-  output <- do.call(
-    what = "rbind",
-    args = output
-  )
-  rownames(output) <- NULL
-  return(output)
+
+  rownames(data) <- NULL
+  data
 }

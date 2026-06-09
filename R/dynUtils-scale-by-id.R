@@ -65,124 +65,115 @@ ScaleByID <- function(data,
                       obs_skip = NULL,
                       cov_skip = NULL,
                       ncores = NULL) {
-  object <- SubsetByID(
+  data <- .DynUtilsSelectSort(
     data = data,
     id = id,
     time = time,
     observed = observed,
-    covariates = covariates,
-    ncores = ncores
+    covariates = covariates
   )
-  if (is.null(covariates)) {
-    cov_skip <- NULL
-  }
-  foo <- function(i,
-                  id,
-                  time,
-                  observed,
-                  covariates,
-                  scale,
-                  obs_skip,
-                  cov_skip) {
-    if (is.null(obs_skip)) {
-      obs <- observed
-    } else {
-      obs <- observed[!observed %in% obs_skip]
-      obs <- obs[obs %in% colnames(i)]
-    }
-    if (is.null(covariates)) {
-      covs <- NULL
-    } else {
-      if (is.null(cov_skip)) {
-        covs <- covariates
-      } else {
-        covs <- covariates[!covariates %in% cov_skip]
-        covs <- covs[covs %in% colnames(i)]
-      }
-    }
-    varnames <- obs
-    if (!is.null(covs)) {
-      varnames <- c(
-        varnames,
-        covs
-      )
-    }
-    if (scale) {
-      # prevent NaN
-      j <- as.data.frame(
-        lapply(
-          X = i[, varnames, drop = FALSE],
-          FUN = function(x) {
-            (
-              x - mean(x, na.rm = TRUE)
-            ) / stats::sd(
-              x,
-              na.rm = TRUE
-            )^as.logical(
-              stats::sd(
-                x,
-                na.rm = TRUE
-              )
-            )
-          }
-        )
-      )
-    } else {
-      j <- as.data.frame(
-        lapply(
-          X = i[, varnames, drop = FALSE],
-          FUN = function(x) {
-            x - mean(x, na.rm = TRUE)
-          }
-        )
-      )
-    }
-    for (k in varnames) {
-      i[, k] <- j[, k]
-    }
-    return(i)
-  }
-  par <- FALSE
-  if (!is.null(ncores)) {
-    ncores <- as.integer(ncores)
-    if (ncores > 1) {
-      par <- TRUE
-    }
-  }
-  if (par) {
-    cl <- parallel::makeCluster(ncores)
-    on.exit(
-      parallel::stopCluster(cl = cl)
-    )
-    output <- parallel::parLapply(
-      cl = cl,
-      X = object,
-      fun = foo,
-      id = id,
-      time = time,
-      observed = observed,
-      covariates = covariates,
-      scale = scale,
-      obs_skip = obs_skip,
-      cov_skip = cov_skip
-    )
+
+  if (is.null(obs_skip)) {
+    obs <- observed
   } else {
-    output <- lapply(
-      X = object,
-      FUN = foo,
-      id = id,
-      time = time,
-      observed = observed,
-      covariates = covariates,
-      scale = scale,
-      obs_skip = obs_skip,
-      cov_skip = cov_skip
-    )
+    obs <- observed[
+      !observed %in% obs_skip
+    ]
   }
-  output <- do.call(
-    what = "rbind",
-    args = output
+
+  obs <- obs[
+    obs %in% names(data)
+  ]
+
+  if (is.null(covariates)) {
+    covs <- NULL
+  } else if (is.null(cov_skip)) {
+    covs <- covariates
+  } else {
+    covs <- covariates[
+      !covariates %in% cov_skip
+    ]
+  }
+
+  covs <- covs[
+    covs %in% names(data)
+  ]
+
+  varnames <- c(
+    obs,
+    covs
   )
-  rownames(output) <- NULL
-  return(output)
+
+  if (length(varnames) > 0L && nrow(data) > 0L) {
+    x <- as.matrix(
+      data[
+        ,
+        varnames,
+        drop = FALSE
+      ]
+    )
+
+    storage.mode(x) <- "double"
+
+    group <- match(
+      x = data[[id]],
+      table = unique(data[[id]])
+    )
+
+    ok <- !is.na(x)
+
+    count <- rowsum(
+      x = ok + 0,
+      group = group,
+      reorder = FALSE
+    )
+
+    x0 <- x
+    x0[!ok] <- 0
+
+    sum_x <- rowsum(
+      x = x0,
+      group = group,
+      reorder = FALSE
+    )
+
+    mean_x <- sum_x / count
+
+    centered <- x - mean_x[
+      group, ,
+      drop = FALSE
+    ]
+
+    if (scale) {
+      centered0 <- centered
+      centered0[!ok] <- 0
+
+      ss <- rowsum(
+        x = centered0^2,
+        group = group,
+        reorder = FALSE
+      )
+
+      sd_x <- sqrt(
+        ss / (count - 1)
+      )
+
+      sd_x[
+        !is.na(sd_x) & sd_x == 0
+      ] <- 1
+
+      centered <- centered / sd_x[
+        group, ,
+        drop = FALSE
+      ]
+    }
+
+    data[
+      ,
+      varnames
+    ] <- centered
+  }
+
+  rownames(data) <- NULL
+  data
 }

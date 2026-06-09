@@ -79,88 +79,59 @@ SubsetByID <- function(data,
   stopifnot(
     is.data.frame(data)
   )
-  data <- data[order(data[, time]), , drop = FALSE]
-  data <- data[order(data[, id]), , drop = FALSE]
-  if (is.null(covariates)) {
-    data <- cbind(
-      data[, id, drop = FALSE],
-      data[, time, drop = FALSE],
-      data[
-        ,
-        observed,
-        drop = FALSE
-      ]
-    )
+
+  data <- .DynUtilsSelectSort(
+    data = data,
+    id = id,
+    time = time,
+    observed = observed,
+    covariates = covariates
+  )
+
+  ids <- unique(data[[id]])
+
+  if (nrow(data) == 0L) {
+    output <- list()
   } else {
-    data <- cbind(
-      data[, id, drop = FALSE],
-      data[, time, drop = FALSE],
-      data[
-        ,
-        c(observed, covariates),
+    run <- rle(data[[id]])
+    end <- cumsum(run$lengths)
+    start <- end - run$lengths + 1L
+
+    output <- vector(
+      mode = "list",
+      length = length(start)
+    )
+
+    for (j in seq_along(start)) {
+      output[[j]] <- data[
+        seq.int(
+          from = start[j],
+          to = end[j]
+        ), ,
         drop = FALSE
       ]
-    )
-  }
-  ids <- unique(data[, id])
-  par <- FALSE
-  if (!is.null(ncores)) {
-    ncores <- as.integer(ncores)
-    if (ncores > 1) {
-      par <- TRUE
+      rownames(output[[j]]) <- NULL
     }
+
+    names(output) <- as.character(ids)
   }
-  if (par) {
-    cl <- parallel::makeCluster(ncores)
-    on.exit(
-      parallel::stopCluster(cl = cl)
-    )
-    output <- parallel::parLapply(
-      cl = cl,
-      X = ids,
-      fun = function(i) {
-        df <- as.data.frame(
-          data[
-            which(data[, id] == i), ,
-            drop = FALSE
-          ]
-        )
-        rownames(df) <- NULL
-        return(
-          df
-        )
-      }
-    )
-  } else {
-    output <- lapply(
-      X = ids,
-      FUN = function(i) {
-        df <- as.data.frame(
-          data[
-            which(data[, id] == i), ,
-            drop = FALSE
-          ]
-        )
-        rownames(df) <- NULL
-        return(
-          df
-        )
-      }
-    )
-  }
+
   attributes(output)$args <- list(
     id = id,
     time = time,
     observed = observed,
     covariates = covariates
   )
+
   attributes(output)$idx <- list(
-    id = unique(data[, id]),
-    time = unique(data[, time])
+    id = ids,
+    time = unique(data[[time]])
   )
+
   class(output) <- c(
     "dynutillist",
     class(output)
   )
-  return(output)
+
+  output
 }
