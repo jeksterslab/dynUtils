@@ -1,0 +1,62 @@
+# dynUtils
+
+Ivan Jacob Agaloos Pesigan 2026-06-09
+
+## Description
+
+Utility functions for data preparation when fitting dynamic models.
+
+## Installation
+
+You can install the released version of `dynUtils` from
+[GitHub](https://github.com/jeksterslab/dynUtils) with:
+
+``` r
+
+if (!require("remotes")) install.packages("remotes")
+remotes::install_github("jeksterslab/dynUtils")
+```
+
+## More Information
+
+See [GitHub Pages](https://jeksterslab.github.io/dynUtils) for package
+documentation.
+
+## References
+
+R Core Team. (2023). *R: A language and environment for statistical
+computing*. R Foundation for Statistical Computing.
+<https://www.R-project.org/>
+
+# Package index
+
+## All functions
+
+- [`DeleteInitialNA()`](https://github.com/jeksterslab/dynUtils/reference/DeleteInitialNA.md)
+  : Delete for NAs in Initial Row By ID
+
+- [`InitialNA()`](https://github.com/jeksterslab/dynUtils/reference/InitialNA.md)
+  : Check for NAs in Initial Row By ID
+
+- [`InsertNA()`](https://github.com/jeksterslab/dynUtils/reference/InsertNA.md)
+  : Insert NAs for Missing Observations
+
+- [`ScaleByID()`](https://github.com/jeksterslab/dynUtils/reference/ScaleByID.md)
+  : Scale by ID
+
+- [`SubsetByID()`](https://github.com/jeksterslab/dynUtils/reference/SubsetByID.md)
+  : Subset Data Set by ID
+
+- [`print(`*`<dynutillist>`*`)`](https://github.com/jeksterslab/dynUtils/reference/print.dynutillist.md)
+  :
+
+  Print Method for Object of Class `dynutillist`
+
+# Articles
+
+### All vignettes
+
+- [dynUtils: Dynamic Modeling
+  Utilities](https://github.com/jeksterslab/dynUtils/articles/dynUtils.md):
+- [dynUtils:
+  Session](https://github.com/jeksterslab/dynUtils/articles/session.md):
